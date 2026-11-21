@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { exigeAluno } from '@/lib/auth';
+import { exigeAcesso } from '@/lib/produtos';
 import { db, type Encontro } from '@/lib/db';
 import { dataHora, diaMes } from '@/lib/datas';
 import { IcoCheck, IcoSeta } from '@/components/Icones';
@@ -8,7 +8,7 @@ import { IcoCheck, IcoSeta } from '@/components/Icones';
 export const metadata: Metadata = { title: 'Jornada' };
 
 export default async function Jornada({ searchParams }: { searchParams: Promise<{ aba?: string }> }) {
-  const aluno = await exigeAluno();
+  const aluno = await exigeAcesso('oratoria');
   const historico = (await searchParams).aba === 'historico';
   const sql = db();
   const [encontros, presencas] = await Promise.all([
@@ -27,8 +27,8 @@ export default async function Jornada({ searchParams }: { searchParams: Promise<
         </div>
       </div>
       <nav className="abas" aria-label="Seções da jornada">
-        <Link href="/jornada" aria-current={!historico ? 'page' : undefined}>Trilha</Link>
-        <Link href="/jornada?aba=historico" aria-current={historico ? 'page' : undefined}>Histórico ({presencas.length})</Link>
+        <Link href="/oratoria/jornada" aria-current={!historico ? 'page' : undefined}>Trilha</Link>
+        <Link href="/oratoria/jornada?aba=historico" aria-current={historico ? 'page' : undefined}>Histórico ({presencas.length})</Link>
       </nav>
 
       {!historico ? (
@@ -47,7 +47,7 @@ export default async function Jornada({ searchParams }: { searchParams: Promise<
               const ok = quando.has(e.numero);
               const formatura = e.numero === 11;
               return (
-                <Link key={e.numero} href={`/jornada/${e.numero}`} className={formatura ? 'destaque' : undefined}>
+                <Link key={e.numero} href={`/oratoria/jornada/${e.numero}`} className={formatura ? 'destaque' : undefined}>
                   <span className="num">{n(e.numero)}</span>
                   <span className="cresce">
                     <span className="t">{formatura ? `Encontro 11 · ${e.titulo}` : e.titulo}</span>

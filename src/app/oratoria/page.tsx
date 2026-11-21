@@ -1,12 +1,12 @@
 import Link from 'next/link';
-import { exigeAluno } from '@/lib/auth';
+import { exigeAcesso } from '@/lib/produtos';
 import { cadastroPct, db, type Encontro, type Plano } from '@/lib/db';
-import { diaMes, difDias, hojeISO, saudacao } from '@/lib/datas';
+import { diaMes, difDias, hojeISO } from '@/lib/datas';
 import { gerarPlano } from '@/lib/plano';
 import { IcoPlano, IcoPlay, IcoSeta } from '@/components/Icones';
 
 export default async function Inicio() {
-  const aluno = await exigeAluno();
+  const aluno = await exigeAcesso('oratoria');
   const sql = db();
   const hoje = hojeISO();
   const [encontros, presencas, planos] = await Promise.all([
@@ -19,18 +19,17 @@ export default async function Inicio() {
   const plano = planos[0] ? { ...planos[0], ...gerarPlano(planos[0], hoje) } : null;
   const treinoHoje = plano?.treinos.find((t) => t.hoje && !t.feito);
   const pct = cadastroPct(aluno);
-  const primeiroNome = aluno.nome.trim().split(/\s+/)[0];
 
   return (
     <>
       <div className="topo">
         <div className="txt">
-          <span className="sobre">{saudacao()},</span>
-          <h1 className="titulo">{primeiroNome}</h1>
+          <span className="sobre">Atitude Educação</span>
+          <h1 className="titulo">Formação de Oratória</h1>
         </div>
       </div>
 
-      <Link href="/jornada" className="card hi">
+      <Link href="/oratoria/jornada" className="card hi">
         <div className="entre">
           <span style={{ fontWeight: 600 }}>Sua frequência</span>
           <span className="h ouro" style={{ fontSize: 18, fontWeight: 700 }}>
@@ -44,7 +43,7 @@ export default async function Inicio() {
       </Link>
 
       {plano && plano.faltam >= 0 ? (
-        <Link href="/plano" className="card">
+        <Link href="/oratoria/plano" className="card">
           <div className="linha">
             <div className="quad" style={{ width: 56, height: 56, borderRadius: 14 }}>
               <span className="h" style={{ fontSize: 20, fontWeight: 700, lineHeight: 1 }}>{plano.faltam === 0 ? 'Hoje' : plano.faltam}</span>
@@ -65,7 +64,7 @@ export default async function Inicio() {
           )}
         </Link>
       ) : (
-        <Link href="/plano" className="card">
+        <Link href="/oratoria/plano" className="card">
           <div className="linha">
             <div className="quad"><IcoPlano /></div>
             <div className="cresce">
@@ -80,7 +79,7 @@ export default async function Inicio() {
       {proximo && (
         <>
           <h2 className="sec">Continue de onde parou</h2>
-          <Link href={`/jornada/${proximo.numero}`} className="card">
+          <Link href={`/oratoria/jornada/${proximo.numero}`} className="card">
             <div className="linha">
               <div className="quad" style={{ width: 64, height: 48, borderRadius: 10, background: 'var(--line)' }}><IcoPlay size={20} /></div>
               <div className="cresce">

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { exigeAluno } from '@/lib/auth';
+import { exigeAcesso } from '@/lib/produtos';
 import { db, type Encontro } from '@/lib/db';
 import { dataHora, diaMes, difDias, hojeISO } from '@/lib/datas';
 import { IcoArquivo, IcoLink, IcoPlay, IcoVoltar } from '@/components/Icones';
@@ -12,7 +12,7 @@ export const metadata: Metadata = { title: 'Aula' };
 type Props = { params: Promise<{ n: string }>; searchParams: Promise<{ aba?: string }> };
 
 export default async function Aula({ params, searchParams }: Props) {
-  const aluno = await exigeAluno();
+  const aluno = await exigeAcesso('oratoria');
   const numero = Number((await params).n);
   if (!Number.isInteger(numero) || numero < 1 || numero > 11) notFound();
   const abaPedida = (await searchParams).aba;
@@ -23,14 +23,14 @@ export default async function Aula({ params, searchParams }: Props) {
     sql<{ confirmado_em: Date }[]>`select confirmado_em from presencas where aluno_id = ${aluno.id} and encontro = ${numero}`,
   ]);
   if (!e) notFound();
-  const base = `/jornada/${numero}`;
+  const base = `/oratoria/jornada/${numero}`;
   const futuro = e.data && difDias(e.data, hojeISO()) > 0;
   const itens = aba === 'materiais' ? e.materiais : e.links;
 
   return (
     <>
       <div className="topo">
-        <Link href="/jornada" className="voltar" aria-label="Voltar para a trilha"><IcoVoltar /></Link>
+        <Link href="/oratoria/jornada" className="voltar" aria-label="Voltar para a trilha"><IcoVoltar /></Link>
         <div className="txt">
           <span className="rot">Encontro {String(numero).padStart(2, '0')}{e.data ? ` · ${diaMes(e.data)}` : ''}</span>
           <h1 className="titulo m">{e.titulo}</h1>

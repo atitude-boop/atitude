@@ -1,19 +1,19 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { IcoInicio, IcoJornada, IcoPerfil, IcoPlano } from './Icones';
+import { IcoGrupo, IcoInicio, IcoJornada, IcoPlano } from './Icones';
 
 const ITENS = [
-  { href: '/', rotulo: 'Início', Ico: IcoInicio, casa: (p: string) => p === '/' },
-  { href: '/jornada', rotulo: 'Jornada', Ico: IcoJornada, casa: (p: string) => p.startsWith('/jornada') },
-  { href: '/plano', rotulo: 'Plano', Ico: IcoPlano, casa: (p: string) => p.startsWith('/plano') },
-  { href: '/perfil', rotulo: 'Perfil', Ico: IcoPerfil, casa: (p: string) => p.startsWith('/perfil') || p.startsWith('/cadastro') },
+  { href: '/', rotulo: 'Atitude', Ico: IcoGrupo, casa: () => false },
+  { href: '/oratoria', rotulo: 'Início', Ico: IcoInicio, casa: (p: string) => p === '/oratoria' },
+  { href: '/oratoria/jornada', rotulo: 'Jornada', Ico: IcoJornada, casa: (p: string) => p.startsWith('/oratoria/jornada') },
+  { href: '/oratoria/plano', rotulo: 'Plano', Ico: IcoPlano, casa: (p: string) => p.startsWith('/oratoria/plano') },
 ];
 
 export default function Nav() {
   const path = usePathname();
   return (
-    <nav className="nav" aria-label="Navegação">
+    <nav className="nav" aria-label="Formação de Oratória">
       <div>
         {ITENS.map(({ href, rotulo, Ico, casa }) => (
           <Link key={href} href={href} aria-current={casa(path) ? 'page' : undefined}>

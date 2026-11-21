@@ -73,3 +73,10 @@ export async function exigeEquipe() {
   if (a.papel !== 'equipe') redirect('/');
   return a;
 }
+
+// Registra o acesso no máximo uma vez por hora (usado no painel para ver quem está sumindo).
+export async function registraAcesso(aluno: Aluno) {
+  if (!aluno.ultimo_acesso || Date.now() - aluno.ultimo_acesso.getTime() > 3600_000) {
+    await db()`update alunos set ultimo_acesso = now() where id = ${aluno.id}`;
+  }
+}

@@ -1,7 +1,7 @@
 'use server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { exigeAluno } from '@/lib/auth';
+import { exigeAcesso } from '@/lib/produtos';
 import { db, type Plano } from '@/lib/db';
 import { dataValida, difDias, hojeISO } from '@/lib/datas';
 import { DURACOES, gerarPlano, TIPOS } from '@/lib/plano';
@@ -9,7 +9,7 @@ import { DURACOES, gerarPlano, TIPOS } from '@/lib/plano';
 export type EstadoPlano = { erro?: string; n?: number; v?: { nome: string; tipo: string; duracao: string; data: string } };
 
 export async function salvarPlano(ant: EstadoPlano, form: FormData): Promise<EstadoPlano> {
-  const aluno = await exigeAluno();
+  const aluno = await exigeAcesso('oratoria');
   const nome = String(form.get('nome') ?? '').trim().slice(0, 60) || 'Minha apresentação';
   const tipo = String(form.get('tipo') ?? '');
   const duracao = String(form.get('duracao') ?? '');
@@ -32,27 +32,24 @@ export async function salvarPlano(ant: EstadoPlano, form: FormData): Promise<Est
       on conflict (aluno_id) do update set nome = excluded.nome, tipo = excluded.tipo, duracao = excluded.duracao,
         data = excluded.data, inicio = excluded.inicio, feitos = '{}', criado_em = now()`;
   }
-  revalidatePath('/plano');
-  revalidatePath('/');
-  redirect('/plano');
+  revalidatePath('/', 'layout');
+  redirect('/oratoria/plano');
 }
 
 export async function alternarTreino(form: FormData) {
-  const aluno = await exigeAluno();
+  const aluno = await exigeAcesso('oratoria');
   const k = Number(form.get('k'));
   const sql = db();
   const [p] = await sql<Plano[]>`select * from planos where aluno_id = ${aluno.id}`;
   if (!p || !Number.isInteger(k) || k < 0 || k >= gerarPlano(p, hojeISO()).total) return;
   const feitos = p.feitos.includes(k) ? p.feitos.filter((x) => x !== k) : [...p.feitos, k].sort((a, b) => a - b);
   await sql`update planos set feitos = ${feitos} where aluno_id = ${aluno.id}`;
-  revalidatePath('/plano');
-  revalidatePath('/');
+  revalidatePath('/', 'layout');
 }
 
 export async function excluirPlano() {
-  const aluno = await exigeAluno();
+  const aluno = await exigeAcesso('oratoria');
   await db()`delete from planos where aluno_id = ${aluno.id}`;
-  revalidatePath('/plano');
-  revalidatePath('/');
-  redirect('/plano');
+  revalidatePath('/', 'layout');
+  redirect('/oratoria/plano');
 }

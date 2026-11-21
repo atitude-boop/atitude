@@ -7,13 +7,16 @@ Esta é a primeira versão (MVP). A especificação completa do produto está em
 
 **Aluno**
 - Entra com o e-mail e um código de acesso pessoal, enviado pela escola no WhatsApp.
-- Jornada: os 11 encontros com objetivo, prática, tarefa, aula gravada, materiais e links.
+- Entrada do grupo Atitude Educação: os produtos (Atitude Club e Formação de Oratória) aparecem em quadros. O aluno só abre o que comprou; o Atitude Club libera tudo. A área própria do Club ainda será construída.
+- Bônus: outros treinamentos e materiais que o aluno recebeu aparecem como avisos nessa entrada.
+- Formação de Oratória, Jornada: os 11 encontros com objetivo, prática, tarefa, aula gravada, materiais e links.
 - Presença: confirma em cada encontro (não pode ser desfeita) e vê o histórico com data e hora.
 - Plano de apresentação: informa uma apresentação e a data, e recebe um treino por dia até lá.
 - Cadastro: dados públicos e dados que só a escola vê.
 
 **Equipe da escola** (`/painel`)
 - Cria os acessos da turma colando uma lista (Nome; e-mail; WhatsApp) e envia o código pelo WhatsApp.
+- Define, na criação e depois aluno a aluno, quais produtos cada um acessa e quais bônus recebeu.
 - Vê quem está ativo, quem está há 14 dias ou mais sem abrir o app e quem nunca entrou.
 - Vê o cadastro completo, as presenças e a apresentação marcada de cada aluno.
 - Gera um novo código para quem perdeu, corrige dados e exclui acessos.
@@ -42,7 +45,8 @@ Os nomes dos botões da Vercel podem mudar com o tempo. Se o banco criar a vari�
 ## Liberar a primeira turma
 
 1. No painel, abra **Conteúdo das aulas** e revise os 11 encontros: textos, data, link do YouTube, materiais.
-2. Abra **Alunos**, cole a lista da turma e clique em **Criar acessos**.
+2. Abra **Alunos**, cole a lista da turma, marque o que esses alunos compraram, escreva os bônus (se houver) e clique em **Criar acessos**.
+   Quem comprou coisas diferentes entra em listas separadas, ou é ajustado depois na página do aluno.
 3. Para cada aluno aparece o código e o botão **Enviar no WhatsApp**, com a mensagem pronta (endereço, e-mail e código).
    O código aparece uma única vez. Se alguém perder, gere outro na página do aluno.
 
@@ -65,4 +69,5 @@ npm run dev
 
 - `db/migrations/`: SQL aplicado em ordem por `scripts/migrate.mjs` (roda sozinho antes de cada build).
 - `src/lib/`: banco (`db.ts`), login e sessão (`auth.ts`), datas no fuso de Brasília (`datas.ts`), regra do plano (`plano.ts`).
-- `src/app/(app)/`: telas do aluno. `src/app/painel/`: telas da equipe. `src/app/entrar/`: login.
+- `src/app/(conta)/`: entrada do grupo, Club, perfil e cadastro. `src/app/oratoria/`: Formação de Oratória. `src/app/painel/`: equipe. `src/app/entrar/`: login.
+- `src/lib/catalogo.ts`: lista de produtos do grupo. Para criar um produto novo, acrescente ali e crie a pasta dele em `src/app/`.

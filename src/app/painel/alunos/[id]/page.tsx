@@ -6,6 +6,8 @@ import { cadastroPct, db, type Aluno, type Plano } from '@/lib/db';
 import { dataHora, dataLonga, textoAcesso } from '@/lib/datas';
 import { linkWhats } from '@/lib/opcoes';
 import { excluirAluno, salvarDadosAluno } from '../../actions';
+import type { Bonus } from '@/lib/catalogo';
+import AcessosBonus from './AcessosBonus';
 import NovoCodigo from './NovoCodigo';
 
 export const metadata: Metadata = { title: 'Aluno' };
@@ -17,12 +19,14 @@ export default async function PaginaAluno({ params, searchParams }: { params: Pr
   const { id } = await params;
   if (!UUID.test(id)) notFound();
   const sql = db();
-  const [[a], presencas, [plano]] = await Promise.all([
+  const [[a], presencas, [plano], acessos, bonus] = await Promise.all([
     sql<Aluno[]>`select * from alunos where id = ${id}`,
     sql<{ encontro: number; titulo: string; confirmado_em: Date }[]>`
       select p.encontro, e.titulo, p.confirmado_em from presencas p join encontros e on e.numero = p.encontro
       where p.aluno_id = ${id} order by p.encontro`,
     sql<Plano[]>`select * from planos where aluno_id = ${id}`,
+    sql<{ produto: string }[]>`select produto from acessos where aluno_id = ${id}`,
+    sql<Bonus[]>`select id, titulo, detalhe, url from bonus where aluno_id = ${id} order by criado_em`,
   ]);
   if (!a) notFound();
   const whats = linkWhats(a.whatsapp, `Olá, ${a.nome.split(/\s+/)[0]}! Aqui é da Atitude.`);
@@ -45,6 +49,8 @@ export default async function PaginaAluno({ params, searchParams }: { params: Pr
         <div className="card"><span className="mut">Presenças</span><span className="n">{presencas.length}<span className="mut" style={{ fontSize: 14, fontWeight: 500 }}> de 11</span></span></div>
         <div className="card"><span className="mut">Cadastro</span><span className="n">{cadastroPct(a)}%</span></div>
       </div>
+
+      <AcessosBonus id={a.id} equipe={a.papel === 'equipe'} acessos={acessos.map((x) => x.produto)} bonus={bonus} />
 
       <div className="duas">
         <div className="card">

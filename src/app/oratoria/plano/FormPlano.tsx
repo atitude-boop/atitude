@@ -41,7 +41,7 @@ export default function FormPlano({ hoje, inicial }: Props) {
       </div>
       {estado.erro && <p className="erro" role="alert">{estado.erro}</p>}
       <button className="btn" disabled={enviando}>{enviando ? 'Montando…' : inicial ? 'Salvar plano' : 'Montar meu plano'}</button>
-      {inicial && <Link href="/plano" className="btn fantasma">Cancelar</Link>}
+      {inicial && <Link href="/oratoria/plano" className="btn fantasma">Cancelar</Link>}
     </form>
   );
 }

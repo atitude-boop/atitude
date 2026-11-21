@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { exigeAluno } from '@/lib/auth';
+import { exigeAcesso } from '@/lib/produtos';
 import { db, type Plano } from '@/lib/db';
 import { dataLonga, diaMes, hojeISO, semana } from '@/lib/datas';
 import { gerarPlano } from '@/lib/plano';
@@ -11,7 +11,7 @@ import FormPlano from './FormPlano';
 export const metadata: Metadata = { title: 'Plano de apresentação' };
 
 export default async function PaginaPlano({ searchParams }: { searchParams: Promise<{ editar?: string }> }) {
-  const aluno = await exigeAluno();
+  const aluno = await exigeAcesso('oratoria');
   const editar = (await searchParams).editar === '1';
   const hoje = hojeISO();
   const [p] = await db()<Plano[]>`select * from planos where aluno_id = ${aluno.id}`;
@@ -55,7 +55,7 @@ export default async function PaginaPlano({ searchParams }: { searchParams: Prom
         <div className="bar"><div style={{ width: `${g.total ? Math.round((g.feitos / g.total) * 100) : 0}%` }} /></div>
         <div className="entre">
           <span className="mut" style={{ fontSize: 13 }}><b style={{ color: 'var(--fg)' }}>{g.feitos} de {g.total}</b> treinos feitos</span>
-          <Link href="/plano?editar=1" style={{ fontSize: 13, fontWeight: 600, textDecoration: 'none', minHeight: 36, display: 'flex', alignItems: 'center' }}>Editar apresentação</Link>
+          <Link href="/oratoria/plano?editar=1" style={{ fontSize: 13, fontWeight: 600, textDecoration: 'none', minHeight: 36, display: 'flex', alignItems: 'center' }}>Editar apresentação</Link>
         </div>
       </div>
 

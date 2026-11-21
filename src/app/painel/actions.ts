@@ -3,6 +3,7 @@ import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { exigeEquipe, hashCodigo, novoCodigo } from '@/lib/auth';
+import { ehProduto, lerBonus } from '@/lib/catalogo';
 import { type Anexo, db } from '@/lib/db';
 import { dataValida } from '@/lib/datas';
 
@@ -14,18 +15,26 @@ async function urlDoApp() {
 }
 
 export type Acesso = { nome: string; email: string; whatsapp: string; codigo: string };
-export type EstadoAlunos = { criados?: Acesso[]; erros?: string[]; url?: string; texto?: string };
+export type EstadoAlunos = { criados?: Acesso[]; erros?: string[]; url?: string; texto?: string; bonus?: string; turma?: string; produtos?: string[]; equipe?: boolean; n?: number };
 
 const EMAIL = /^[^\s@;,]+@[^\s@;,]+\.[^\s@;,]+$/;
 
-export async function adicionarAlunos(_: EstadoAlunos, form: FormData): Promise<EstadoAlunos> {
+export async function adicionarAlunos(ant: EstadoAlunos, form: FormData): Promise<EstadoAlunos> {
   await exigeEquipe();
   const texto = String(form.get('lista') ?? '');
   const turma = String(form.get('turma') ?? '').trim().slice(0, 60);
   const papel = form.get('equipe') === 'on' ? 'equipe' : 'aluno';
+  const produtos = papel === 'equipe' ? [] : form.getAll('produto').map(String).filter(ehProduto);
+  const textoBonus = String(form.get('bonus') ?? '');
+  const n = (ant.n ?? 0) + 1;
+  // Devolve o que foi marcado e digitado, para o formulário não perder nada quando houver erro.
+  const volta = { texto, bonus: textoBonus, turma, produtos: form.getAll('produto').map(String), equipe: papel === 'equipe', n };
+  const bonus = lerBonus(textoBonus);
+  if (typeof bonus === 'string') return { erros: [bonus], ...volta };
   const linhas = texto.split('\n').map((l) => l.trim()).filter(Boolean);
-  if (!linhas.length) return { erros: ['Escreva pelo menos um aluno: Nome; e-mail; WhatsApp'], texto };
-  if (linhas.length > 200) return { erros: ['Envie no máximo 200 alunos por vez.'], texto };
+  if (!linhas.length) return { erros: ['Escreva pelo menos um aluno: Nome; e-mail; WhatsApp'], ...volta };
+  if (linhas.length > 200) return { erros: ['Envie no máximo 200 alunos por vez.'], ...volta };
+  if (papel === 'aluno' && !produtos.length) return { erros: ['Marque pelo menos um produto que estes alunos compraram.'], ...volta };
 
   const sql = db();
   const criados: Acesso[] = [];
@@ -43,11 +52,14 @@ export async function adicionarAlunos(_: EstadoAlunos, form: FormData): Promise<
       insert into alunos (email, nome, whatsapp, turma, papel, codigo_hash)
       values (${email}, ${nome.slice(0, 80)}, ${whatsapp.slice(0, 30)}, ${turma}, ${papel}, ${hashCodigo(codigo)})
       on conflict (email) do nothing returning id`;
-    if (r.length) criados.push({ nome, email, whatsapp, codigo });
-    else erros.push(`${email}: já está cadastrado`);
+    if (!r.length) { erros.push(`${email}: já está cadastrado`); continue; }
+    const id = r[0].id as string;
+    for (const produto of produtos) await sql`insert into acessos (aluno_id, produto) values (${id}, ${produto})`;
+    for (const b of bonus) await sql`insert into bonus (aluno_id, titulo, detalhe, url) values (${id}, ${b.titulo}, ${b.detalhe}, ${b.url})`;
+    criados.push({ nome, email, whatsapp, codigo });
   }
   revalidatePath('/painel', 'layout');
-  return { criados, erros, url: await urlDoApp(), texto: pendentes.join('\n') };
+  return { criados, erros, url: await urlDoApp(), ...volta, texto: pendentes.join('\n'), bonus: pendentes.length ? textoBonus : '' };
 }
 
 export type EstadoCodigo = { acesso?: Acesso; url?: string };
@@ -75,6 +87,41 @@ export async function salvarDadosAluno(form: FormData) {
   if (nome) await db()`update alunos set nome = ${nome}, turma = ${turma}, whatsapp = ${whatsapp} where id = ${id}`;
   revalidatePath('/painel', 'layout');
   redirect(`/painel/alunos/${id}?salvo=1`);
+}
+
+export async function salvarAcessos(form: FormData) {
+  await exigeEquipe();
+  const id = String(form.get('id') ?? '');
+  const produtos = form.getAll('produto').map(String).filter(ehProduto);
+  const sql = db();
+  await sql.begin(async (tx) => {
+    await tx`delete from acessos where aluno_id = ${id}`;
+    for (const produto of produtos) await tx`insert into acessos (aluno_id, produto) values (${id}, ${produto})`;
+  });
+  revalidatePath('/', 'layout');
+  redirect(`/painel/alunos/${id}?salvo=1`);
+}
+
+export type EstadoBonus = { erro?: string; texto?: string; n?: number };
+
+export async function adicionarBonus(ant: EstadoBonus, form: FormData): Promise<EstadoBonus> {
+  await exigeEquipe();
+  const id = String(form.get('id') ?? '');
+  const texto = String(form.get('bonus') ?? '');
+  const n = (ant.n ?? 0) + 1;
+  const lista = lerBonus(texto);
+  if (typeof lista === 'string') return { erro: lista, texto, n };
+  if (!lista.length) return { erro: 'Escreva pelo menos um bônus.', texto, n };
+  const sql = db();
+  for (const b of lista) await sql`insert into bonus (aluno_id, titulo, detalhe, url) values (${id}, ${b.titulo}, ${b.detalhe}, ${b.url})`;
+  revalidatePath('/', 'layout');
+  return { n };
+}
+
+export async function removerBonus(form: FormData) {
+  await exigeEquipe();
+  await db()`delete from bonus where id = ${String(form.get('bonus_id') ?? '')}`;
+  revalidatePath('/', 'layout');
 }
 
 export async function excluirAluno(form: FormData) {
