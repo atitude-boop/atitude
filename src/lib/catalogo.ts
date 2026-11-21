@@ -1,8 +1,18 @@
-// Produtos do grupo Atitude Educação que aparecem na tela de entrada do app.
+// O que o grupo Atitude Educação oferece e aparece na tela de entrada: programas (quadros grandes) e aplicativos.
 export const PRODUTOS = [
-  { id: 'club', nome: 'Atitude Club', resumo: 'O programa principal do grupo, com acesso a tudo.', rota: '/club' },
-  { id: 'oratoria', nome: 'Formação de Oratória', resumo: 'Encontros semanais e presenciais.', rota: '/oratoria' },
+  { id: 'club', tipo: 'programa', nome: 'Atitude Club', resumo: 'O programa principal do grupo, com acesso a tudo.', rota: '/club' },
+  { id: 'oratoria', tipo: 'programa', nome: 'Formação de Oratória', resumo: 'Encontros semanais e presenciais.', rota: '/oratoria' },
+  { id: 'pes', tipo: 'programa', nome: 'Atitude Pés', resumo: '', rota: '/area/pes' },
+  { id: 'comunidade', tipo: 'programa', nome: 'Comunidade Atitude', resumo: 'A rede de alunos da Atitude.', rota: '/area/comunidade' },
+  { id: 'updoctors', tipo: 'programa', nome: 'Up Doctors', resumo: 'Programa de acompanhamento médico.', rota: '/area/updoctors' },
+  // Aplicativos: vendidos também em separado, para quem não é aluno de um programa.
+  { id: 'teleprompter', tipo: 'app', nome: 'Teleprompter', resumo: 'Leia o roteiro olhando para a câmera e grave.', rota: '/teleprompter' },
+  { id: 'simulador', tipo: 'app', nome: 'Simulador de vendas', resumo: 'Treine a venda com um cliente difícil.', rota: '/area/simulador' },
+  { id: 'analise', tipo: 'app', nome: 'Análise de vídeo', resumo: 'Envie um vídeo e receba o feedback da sua oratória.', rota: '/area/analise' },
 ] as const;
+
+export const PROGRAMAS = PRODUTOS.filter((p) => p.tipo === 'programa');
+export const APPS = PRODUTOS.filter((p) => p.tipo === 'app');
 
 export type ProdutoId = (typeof PRODUTOS)[number]['id'];
 export const ehProduto = (x: string): x is ProdutoId => PRODUTOS.some((p) => p.id === x);

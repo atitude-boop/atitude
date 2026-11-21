@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import { exigeAluno } from '@/lib/auth';
-import { type Bonus, PRODUTOS } from '@/lib/catalogo';
+import { APPS, type Bonus, PROGRAMAS } from '@/lib/catalogo';
 import { db } from '@/lib/db';
 import { saudacao } from '@/lib/datas';
 import { acessosDe } from '@/lib/produtos';
-import { IcoCadeado, IcoClub, IcoMicrofone, IcoPerfil, IcoPresente, IcoSeta } from '@/components/Icones';
+import { IcoCadeado, IcoCamadas, IcoClub, IcoConversa, IcoMicrofone, IcoPerfil, IcoPessoas, IcoPresente, IcoPulso, IcoRoteiro, IcoSeta, IcoVideo } from '@/components/Icones';
 
-const ICONE = { club: IcoClub, oratoria: IcoMicrofone };
+const ICONE = { club: IcoClub, oratoria: IcoMicrofone, pes: IcoCamadas, comunidade: IcoPessoas, updoctors: IcoPulso, teleprompter: IcoRoteiro, simulador: IcoConversa, analise: IcoVideo };
 
 export default async function Grupo() {
   const aluno = await exigeAluno();
@@ -30,19 +30,34 @@ export default async function Grupo() {
       </p>
 
       <div className="produtos">
-        {PRODUTOS.map((p) => {
+        {PROGRAMAS.map((p) => {
           const Ico = ICONE[p.id];
           const tem = acessos.has(p.id);
           return (
-            <Link key={p.id} href={p.rota} className={`produto${tem ? ' meu' : ''}`}>
+            <Link key={p.id} href={p.rota} className={`produto${tem ? ' meu' : ''}${p.id === 'club' ? ' principal' : ''}`}>
               <span className="quad"><Ico /></span>
               <span className="cresce">
                 <span className="h" style={{ fontSize: 17, fontWeight: 600, lineHeight: 1.2 }}>{p.nome}</span>
-                <span className="mut" style={{ fontSize: 12.5 }}>{p.resumo}</span>
+                {p.resumo && <span className="mut" style={{ fontSize: 12.5 }}>{p.resumo}</span>}
               </span>
               {tem
                 ? <span className="chip" style={{ alignSelf: 'flex-start' }}>Entrar <IcoSeta size={13} /></span>
                 : <span className="chip trancado" style={{ alignSelf: 'flex-start' }}><IcoCadeado size={13} /> Não incluso</span>}
+            </Link>
+          );
+        })}
+      </div>
+
+      <h2 className="sec" style={{ fontSize: 14 }}>Nossos aplicativos</h2>
+      <div className="apps">
+        {APPS.map((p) => {
+          const Ico = ICONE[p.id];
+          const tem = acessos.has(p.id);
+          return (
+            <Link key={p.id} href={p.rota} className={`app${tem ? ' meu' : ''}`} aria-label={`${p.nome}${tem ? '' : ' (não incluso)'}`}>
+              <span className="quad"><Ico size={18} /></span>
+              <span className="nome">{p.nome}</span>
+              {!tem && <span className="tranca"><IcoCadeado size={12} /></span>}
             </Link>
           );
         })}

@@ -1,6 +1,6 @@
 'use client';
 import { useActionState } from 'react';
-import { PRODUTOS } from '@/lib/catalogo';
+import { APPS, PRODUTOS, PROGRAMAS } from '@/lib/catalogo';
 import { adicionarAlunos, type EstadoAlunos } from '../actions';
 import CartaoAcesso from '../CartaoAcesso';
 
@@ -17,15 +17,18 @@ export default function FormAlunos() {
         </div>
         <fieldset className="campo">
           <legend>O que estes alunos compraram</legend>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 20px' }}>
-            {PRODUTOS.map((p) => (
-              <label key={p.id} className="check" style={{ textTransform: 'none', letterSpacing: 0, color: 'var(--fg)', fontWeight: 500, fontSize: 14, alignItems: 'center', minHeight: 40 }}>
-                <input type="checkbox" name="produto" value={p.id} defaultChecked={estado.produtos ? estado.produtos.includes(p.id) : p.id === 'oratoria'} />
-                <span>{p.nome}</span>
-              </label>
-            ))}
-          </div>
-          <span className="dica">Cada aluno só abre o que estiver marcado. O Atitude Club libera tudo.</span>
+          {[['Programas', PROGRAMAS], ['Aplicativos', APPS]].map(([rotulo, lista]) => (
+            <div key={rotulo as string} style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 20px', alignItems: 'center' }}>
+              <span className="mut" style={{ fontSize: 12.5, width: 92 }}>{rotulo as string}</span>
+              {(lista as typeof PRODUTOS[number][]).map((p) => (
+                <label key={p.id} className="check" style={{ textTransform: 'none', letterSpacing: 0, color: 'var(--fg)', fontWeight: 500, fontSize: 14, alignItems: 'center', minHeight: 40 }}>
+                  <input type="checkbox" name="produto" value={p.id} defaultChecked={estado.produtos ? estado.produtos.includes(p.id) : p.id === 'oratoria'} />
+                  <span>{p.nome}</span>
+                </label>
+              ))}
+            </div>
+          ))}
+          <span className="dica">Cada pessoa só abre o que estiver marcado. O Atitude Club libera tudo, inclusive os aplicativos. Quem comprou só um aplicativo entra só com ele marcado.</span>
         </fieldset>
         <div className="campo">
           <label htmlFor="bonus">Bônus que receberam (opcional)</label>

@@ -1,6 +1,6 @@
 'use client';
 import { useActionState } from 'react';
-import { type Bonus, PRODUTOS } from '@/lib/catalogo';
+import { APPS, type Bonus, PRODUTOS, PROGRAMAS } from '@/lib/catalogo';
 import { adicionarBonus, type EstadoBonus, removerBonus, salvarAcessos } from '../../actions';
 
 type Props = { id: string; equipe: boolean; acessos: string[]; bonus: Bonus[] };
@@ -16,13 +16,18 @@ export default function AcessosBonus({ id, equipe, acessos, bonus }: Props) {
           <span className="mut" style={{ fontSize: 14 }}>Quem é da equipe abre todos os produtos.</span>
         ) : (
           <>
-            {PRODUTOS.map((p) => (
-              <label key={p.id} className="check" style={{ alignItems: 'center', minHeight: 40 }}>
-                <input type="checkbox" name="produto" value={p.id} defaultChecked={acessos.includes(p.id)} />
-                <span><b style={{ fontWeight: 600 }}>{p.nome}</b><br /><span className="mut" style={{ fontSize: 13 }}>{p.resumo}</span></span>
-              </label>
+            {[['Programas', PROGRAMAS], ['Aplicativos', APPS]].map(([rotulo, lista]) => (
+              <div key={rotulo as string} style={{ display: 'flex', flexDirection: 'column' }}>
+                <span className="rot" style={{ color: 'var(--mut)', margin: '4px 0' }}>{rotulo as string}</span>
+                {(lista as typeof PRODUTOS[number][]).map((p) => (
+                  <label key={p.id} className="check" style={{ alignItems: 'center', minHeight: 44 }}>
+                    <input type="checkbox" name="produto" value={p.id} defaultChecked={acessos.includes(p.id)} />
+                    <span><b style={{ fontWeight: 600 }}>{p.nome}</b>{p.resumo && <><br /><span className="mut" style={{ fontSize: 13 }}>{p.resumo}</span></>}</span>
+                  </label>
+                ))}
+              </div>
             ))}
-            <span className="mut" style={{ fontSize: 13 }}>Sem nenhum produto marcado, o aluno entra no app mas não abre nenhuma área.</span>
+            <span className="mut" style={{ fontSize: 13 }}>Sem nada marcado, a pessoa entra no app mas não abre nenhuma área. O Atitude Club libera tudo.</span>
             <button className="btn p sec2" style={{ alignSelf: 'flex-start' }}>Salvar acessos</button>
           </>
         )}
