@@ -4,7 +4,7 @@ import { exigeAcesso } from '@/lib/produtos';
 import { db, type Plano } from '@/lib/db';
 import { dataLonga, diaMes, hojeISO, semana } from '@/lib/datas';
 import { gerarPlano } from '@/lib/plano';
-import { IcoCheck } from '@/components/Icones';
+import { IcoCheck, IcoVoltar } from '@/components/Icones';
 import { alternarTreino, excluirPlano } from './actions';
 import FormPlano from './FormPlano';
 
@@ -18,9 +18,10 @@ export default async function PaginaPlano({ searchParams }: { searchParams: Prom
 
   const topo = (
     <div className="topo">
+      <Link href="/oratoria/treinar" className="voltar" aria-label="Voltar para Treinar"><IcoVoltar /></Link>
       <div className="txt">
         <span className="sobre">Plano de treino</span>
-        <h1 className="titulo">Minha apresentação</h1>
+        <h1 className="titulo m">Minha apresentação</h1>
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import { saudacao } from '@/lib/datas';
 import { acessosDe } from '@/lib/produtos';
 import { IcoCadeado, IcoCamadas, IcoClub, IcoConversa, IcoMicrofone, IcoPerfil, IcoPessoas, IcoPresente, IcoPulso, IcoRoteiro, IcoSeta, IcoVideo } from '@/components/Icones';
 
-const ICONE = { club: IcoClub, oratoria: IcoMicrofone, pes: IcoCamadas, comunidade: IcoPessoas, updoctors: IcoPulso, teleprompter: IcoRoteiro, simulador: IcoConversa, analise: IcoVideo };
+const ICONE = { club: IcoClub, oratoria: IcoMicrofone, pass: IcoCamadas, comunidade: IcoPessoas, updoctors: IcoPulso, teleprompter: IcoRoteiro, simulador: IcoConversa, analise: IcoVideo };
 
 export default async function Grupo() {
   const aluno = await exigeAluno();

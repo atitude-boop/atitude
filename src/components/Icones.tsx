@@ -26,3 +26,4 @@ export const IcoRoteiro = (p: S) => <I d="M4 5h16M4 10h16M4 15h10M17 14l4 3-4 3z
 export const IcoConversa = (p: S) => <I d="M4 5h12a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-5 4zM18 9h1a2 2 0 0 1 2 2v9l-4-3h-5" size={22} {...p} />;
 export const IcoVideo = (p: S) => <I d="M3 7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 10l5-3v10l-5-3" size={22} {...p} />;
 export const IcoPulso = (p: S) => <I d="M3 12h4l2-6 4 12 2-6h6" size={22} {...p} />;
+export const IcoAgenda = (p: S) => <I d="M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM3 10h18M8 3v4M16 3v4" size={22} {...p} />;

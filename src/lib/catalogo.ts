@@ -2,7 +2,7 @@
 export const PRODUTOS = [
   { id: 'club', tipo: 'programa', nome: 'Atitude Club', resumo: 'O programa principal do grupo, com acesso a tudo.', rota: '/club' },
   { id: 'oratoria', tipo: 'programa', nome: 'Formação de Oratória', resumo: 'Encontros semanais e presenciais.', rota: '/oratoria' },
-  { id: 'pes', tipo: 'programa', nome: 'Atitude Pés', resumo: '', rota: '/area/pes' },
+  { id: 'pass', tipo: 'programa', nome: 'Atitude Pass', resumo: '', rota: '/area/pass' },
   { id: 'comunidade', tipo: 'programa', nome: 'Comunidade Atitude', resumo: 'A rede de alunos da Atitude.', rota: '/area/comunidade' },
   { id: 'updoctors', tipo: 'programa', nome: 'Up Doctors', resumo: 'Programa de acompanhamento médico.', rota: '/area/updoctors' },
   // Aplicativos: vendidos também em separado, para quem não é aluno de um programa.

@@ -1,13 +1,15 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { IcoGrupo, IcoInicio, IcoJornada, IcoPlano } from './Icones';
+import { IcoAgenda, IcoInicio, IcoJornada, IcoMicrofone, IcoPerfil } from './Icones';
 
+const R = '/oratoria';
 const ITENS = [
-  { href: '/', rotulo: 'Atitude', Ico: IcoGrupo, casa: () => false },
-  { href: '/oratoria', rotulo: 'Início', Ico: IcoInicio, casa: (p: string) => p === '/oratoria' },
-  { href: '/oratoria/jornada', rotulo: 'Jornada', Ico: IcoJornada, casa: (p: string) => p.startsWith('/oratoria/jornada') },
-  { href: '/oratoria/plano', rotulo: 'Plano', Ico: IcoPlano, casa: (p: string) => p.startsWith('/oratoria/plano') },
+  { href: R, rotulo: 'Início', Ico: IcoInicio, casa: (p: string) => p === R },
+  { href: `${R}/jornada`, rotulo: 'Jornada', Ico: IcoJornada, casa: (p: string) => p.startsWith(`${R}/jornada`) },
+  { href: `${R}/treinar`, rotulo: 'Treinar', Ico: IcoMicrofone, casa: (p: string) => p.startsWith(`${R}/treinar`) || p.startsWith(`${R}/plano`) },
+  { href: `${R}/agenda`, rotulo: 'Agenda', Ico: IcoAgenda, casa: (p: string) => p.startsWith(`${R}/agenda`) },
+  { href: `${R}/perfil`, rotulo: 'Perfil', Ico: IcoPerfil, casa: (p: string) => p.startsWith(`${R}/perfil`) },
 ];
 
 export default function Nav() {
