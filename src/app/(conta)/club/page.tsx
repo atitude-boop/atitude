@@ -21,12 +21,12 @@ export default async function Club() {
       <div className="card hi">
         <span className="quad"><IcoClub /></span>
         <span className="h" style={{ fontSize: 18, fontWeight: 600 }}>
-          {tem ? 'Você faz parte do Atitude Club' : 'O programa principal do grupo'}
+          {tem ? 'Você faz parte do Atitude Club' : 'Faça parte do Atitude Club'}
         </span>
         <span className="mut" style={{ fontSize: 14 }}>
           {tem
             ? 'A área do Club dentro do app está sendo preparada. Enquanto isso, o seu acesso já libera todas as formações disponíveis.'
-            : 'O Atitude Club dá acesso a tudo o que a Atitude Educação oferece. Ele não está incluso no seu acesso atual. Fale com a equipe da escola para conhecer.'}
+            : 'O programa principal do grupo: dá acesso a tudo o que a Atitude Educação oferece. Ainda não está incluso no seu acesso. Fale com a equipe da Atitude para conhecer e fazer parte.'}
         </span>
       </div>
       {tem && (

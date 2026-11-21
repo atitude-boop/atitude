@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { exigeAluno } from '@/lib/auth';
-import { PRODUTOS } from '@/lib/catalogo';
+import { PRODUTOS, SOBRE } from '@/lib/catalogo';
 import { acessosDe } from '@/lib/produtos';
 import { IcoCadeado, IcoVoltar } from '@/components/Icones';
 
@@ -26,12 +26,13 @@ export default async function Area({ params }: { params: Promise<{ id: string }>
       </div>
       <div className="card hi">
         {!tem && <span className="quad"><IcoCadeado /></span>}
-        <span className="h" style={{ fontSize: 18, fontWeight: 600 }}>{tem ? 'Em preparação' : 'Não incluso no seu acesso'}</span>
+        <span className="h" style={{ fontSize: 18, fontWeight: 600 }}>{tem ? 'Em preparação' : `Faça parte do ${p.nome}`}</span>
         {p.resumo && <span style={{ fontSize: 14 }}>{p.resumo}</span>}
+        {!tem && SOBRE[p.id] && <span style={{ fontSize: 14, whiteSpace: 'pre-line' }}>{SOBRE[p.id]}</span>}
         <span className="mut" style={{ fontSize: 14 }}>
           {tem
             ? 'O seu acesso já está garantido. Esta área está sendo preparada e aparece aqui assim que for liberada.'
-            : 'Fale com a equipe da escola para conhecer e liberar o seu acesso.'}
+            : 'Ainda não está incluso no seu acesso. Fale com a equipe da Atitude para conhecer e fazer parte.'}
         </span>
       </div>
     </>

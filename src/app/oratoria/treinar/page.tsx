@@ -26,7 +26,7 @@ export default async function Treinar({ searchParams }: { searchParams: Promise<
 
   const atalhos = [
     { href: '/oratoria/plano', Ico: IcoPlano, nome: 'Minha apresentação', sub: p && g && g.faltam >= 0 ? `${diaMes(p.data)} · ${g.feitos} de ${g.total} treinos` : 'Plano de treino até o dia', aberto: true },
-    { href: '/teleprompter', Ico: IcoRoteiro, nome: 'Teleprompter', sub: 'Leia o roteiro e grave', aberto: acessos.has('teleprompter') },
+    { href: '/teleprompter', Ico: IcoRoteiro, nome: 'Teleprompter', sub: 'Roteiros, gravação e edição', aberto: acessos.has('teleprompter') },
     { href: '/area/simulador', Ico: IcoConversa, nome: 'Simulador de vendas', sub: 'Cliente difícil por voz', aberto: acessos.has('simulador') },
     { href: '/area/analise', Ico: IcoVideo, nome: 'Análise de vídeo', sub: 'Feedback da sua oratória', aberto: acessos.has('analise') },
   ];
@@ -60,12 +60,12 @@ export default async function Treinar({ searchParams }: { searchParams: Promise<
 
       <div className="atalhos">
         {atalhos.map(({ href, Ico, nome, sub, aberto }) => (
-          <Link key={href} href={href} className="card" style={{ gap: 6, padding: 14, position: 'relative' }}>
+          <a key={href} href={href} className="card" style={{ gap: 6, padding: 14, position: 'relative' }}>
             <span className={aberto ? 'ouro' : 'mut'} style={{ display: 'flex' }}><Ico /></span>
             <span style={{ fontWeight: 600, fontSize: 14, color: aberto ? undefined : 'var(--mut)' }}>{nome}</span>
-            <span className="mut" style={{ fontSize: 12 }}>{aberto ? sub : 'Não incluso no seu acesso'}</span>
+            <span className="mut" style={{ fontSize: 12 }}>{aberto ? sub : 'Faça parte'}</span>
             {!aberto && <span className="mut" style={{ position: 'absolute', top: 12, right: 12, display: 'flex' }}><IcoCadeado size={13} /></span>}
-          </Link>
+          </a>
         ))}
       </div>
     </>

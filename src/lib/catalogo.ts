@@ -4,12 +4,17 @@ export const PRODUTOS = [
   { id: 'oratoria', tipo: 'programa', nome: 'Formação de Oratória', resumo: 'Encontros semanais e presenciais.', rota: '/oratoria' },
   { id: 'pass', tipo: 'programa', nome: 'Atitude Pass', resumo: '', rota: '/area/pass' },
   { id: 'comunidade', tipo: 'programa', nome: 'Comunidade Atitude', resumo: 'A rede de alunos da Atitude.', rota: '/area/comunidade' },
-  { id: 'updoctors', tipo: 'programa', nome: 'Up Doctors', resumo: 'Programa de acompanhamento médico.', rota: '/area/updoctors' },
+  { id: 'updoctors', tipo: 'programa', nome: 'Up Doctors', resumo: 'Programa de acelerador médico com Marcelo Rezende e Dr. Bruno Carvalho.', rota: '/area/updoctors' },
   // Aplicativos: vendidos também em separado, para quem não é aluno de um programa.
-  { id: 'teleprompter', tipo: 'app', nome: 'Teleprompter', resumo: 'Leia o roteiro olhando para a câmera e grave.', rota: '/teleprompter' },
+  { id: 'teleprompter', tipo: 'app', nome: 'Teleprompter', resumo: 'Roteiros, teleprompter com gravação e edição de vídeo.', rota: '/teleprompter' },
   { id: 'simulador', tipo: 'app', nome: 'Simulador de vendas', resumo: 'Treine a venda com um cliente difícil.', rota: '/area/simulador' },
   { id: 'analise', tipo: 'app', nome: 'Análise de vídeo', resumo: 'Envie um vídeo e receba o feedback da sua oratória.', rota: '/area/analise' },
 ] as const;
+
+// Texto longo da página "Faça parte" de cada item, mostrado a quem ainda não tem acesso. Vazio = usa só o resumo.
+export const SOBRE: Partial<Record<(typeof PRODUTOS)[number]['id'], string>> = {
+  updoctors: '',
+};
 
 export const PROGRAMAS = PRODUTOS.filter((p) => p.tipo === 'programa');
 export const APPS = PRODUTOS.filter((p) => p.tipo === 'app');

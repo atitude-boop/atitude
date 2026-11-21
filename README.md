@@ -8,7 +8,8 @@ Esta é a primeira versão (MVP). A especificação completa do produto está em
 **Aluno**
 - Entra com o e-mail e um código de acesso pessoal, enviado pela escola no WhatsApp.
 - Entrada do grupo Atitude Educação: os programas (Atitude Club, Formação de Oratória, Atitude Pass, Comunidade Atitude, Up Doctors) aparecem em quadros e, abaixo, a seção "Nossos aplicativos" (Teleprompter, Simulador de vendas, Análise de vídeo). Cada pessoa só abre o que comprou; o Atitude Club libera tudo. Aplicativos podem ser vendidos em separado.
-- Teleprompter: roteiro, velocidade e tamanho da letra, ensaio e gravação com a câmera da frente, com o vídeo salvo no aparelho.
+- Teleprompter: é o aplicativo completo da escola (arquivo `conteudo/teleprompter.html`), com roteiros em pastas, gravação com a câmera, legendas e edição de vídeo. Os roteiros ficam guardados no aparelho de cada pessoa. Para atualizar, troque esse arquivo.
+- Quem não tem um item vê "Faça parte" e uma página de apresentação (textos em `src/lib/catalogo.ts`).
 - Ainda sem conteúdo próprio (mostram "em preparação"): Atitude Club, Atitude Pass, Comunidade Atitude, Up Doctors, Simulador de vendas e Análise de vídeo.
 - Bônus: outros treinamentos e materiais que o aluno recebeu aparecem como avisos nessa entrada.
 - Formação de Oratória com cinco abas: Início, Jornada, Treinar, Agenda e Perfil.

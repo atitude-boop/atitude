@@ -42,7 +42,7 @@ export default async function Grupo() {
               </span>
               {tem
                 ? <span className="chip" style={{ alignSelf: 'flex-start' }}>Entrar <IcoSeta size={13} /></span>
-                : <span className="chip trancado" style={{ alignSelf: 'flex-start' }}><IcoCadeado size={13} /> Não incluso</span>}
+                : <span className="chip convite" style={{ alignSelf: 'flex-start' }}>Faça parte <IcoSeta size={13} /></span>}
             </Link>
           );
         })}
@@ -54,11 +54,11 @@ export default async function Grupo() {
           const Ico = ICONE[p.id];
           const tem = acessos.has(p.id);
           return (
-            <Link key={p.id} href={p.rota} className={`app${tem ? ' meu' : ''}`} aria-label={`${p.nome}${tem ? '' : ' (não incluso)'}`}>
+            <a key={p.id} href={p.rota} className={`app${tem ? ' meu' : ''}`} aria-label={`${p.nome}${tem ? '' : ' (não incluso)'}`}>
               <span className="quad"><Ico size={18} /></span>
               <span className="nome">{p.nome}</span>
               {!tem && <span className="tranca"><IcoCadeado size={12} /></span>}
-            </Link>
+            </a>
           );
         })}
       </div>

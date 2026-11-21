@@ -135,6 +135,7 @@ dt { color: var(--mut); } dd { margin: 0; overflow-wrap: anywhere; white-space: 
 .produto .chip { margin-top: auto; }
 .produto.principal { grid-column: 1 / -1; min-height: 0; }
 .chip.trancado { background: var(--line); color: var(--mut); }
+.chip.convite { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 1px #4A4740; }
 .aviso.bonus { text-decoration: none; color: var(--fg); align-items: flex-start; }
 a.aviso.bonus:hover { color: var(--fg); background: #2E2A20; }
 @media (max-width: 340px) { .produtos { grid-template-columns: minmax(0, 1fr); } .produto { min-height: 0; } }
